@@ -1,0 +1,32 @@
+print(models)
+print(acc)
+
+fig, ax = plt.subplots(2, 2, figsize=(24,12), facecolor="khaki")
+
+ax[0][0].set_facecolor('palegoldenrod')
+ax[0][0].set_title('Accuracy CNN_model', fontweight="bold")
+ax[0][0].set_xlabel('',size=50)
+ax[0][0].plot(history_CNN.epoch, history_CNN.history["accuracy"], label="Train accuracy'", color="navy")
+ax[0][0].plot(history_CNN.epoch, history_CNN.history["val_accuracy"], label="Validation accuracy", color="crimson", linestyle="dashed")
+ax[0][0].legend()
+
+ax[0][1].set_facecolor('palegoldenrod')
+ax[0][1].set_title('Accuracy ReseNet_model', fontweight="bold")
+ax[0][1].set_xlabel('',size=50)
+ax[0][1].plot(history_ReseNet.epoch, history_ReseNet.history["accuracy"], label="Train accuracy'", color="navy")
+ax[0][1].plot(history_ReseNet.epoch, history_ReseNet.history["val_accuracy"], label="Validation accuracy", color="crimson", linestyle="dashed")
+ax[0][1].legend()
+
+ax[1][0].set_facecolor('palegoldenrod')
+ax[1][0].set_title('Accuracy VGG_model', fontweight="bold")
+ax[1][0].set_xlabel('',size=50)
+ax[1][0].plot(history_VGG.epoch, history_VGG.history["accuracy"], label="Train accuracy'", color="navy")
+ax[1][0].plot(history_VGG.epoch, history_VGG.history["val_accuracy"], label="Validation accuracy", color="crimson", linestyle="dashed")
+ax[1][0].legend()
+
+ax[1][1].set_facecolor('palegoldenrod')
+ax[1][1].set_title('Accuracy DenseNet_model', fontweight="bold")
+ax[1][1].set_xlabel('',size=50)
+ax[1][1].plot(history_DenseNet.epoch, history_DenseNet.history["accuracy"], label="Train accuracy'", color="navy")
+ax[1][1].plot(history_DenseNet.epoch, history_DenseNet.history["val_accuracy"], label="Validation accuracy", color="crimson", linestyle="dashed")
+ax[1][1].legend()
