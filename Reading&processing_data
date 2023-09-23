@@ -1,0 +1,139 @@
+import  cv2
+
+images = []
+labels = []
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/train/MildDemented"):
+    label = "MildDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/test/MildDemented"):
+    label = "MildDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/train/VeryMildDemented"):
+    label = "VeryMildDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/test/VeryMildDemented"):
+    label = "VeryMildDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/train/ModerateDemented"):
+    label = "ModerateDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/test/ModerateDemented"):
+    label = "ModerateDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/train/NonDemented"):
+    label = "NonDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+for dir_path in glob.glob("your path/Alzheimer_s Dataset/test/NonDemented"):
+    label = "NonDemented"
+    for image_path in glob.glob(os.path.join(dir_path, "*.jpg")):
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (45, 45))
+        #image = cv2.Canny(image, 100, 200)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        images.append(image)
+        labels.append(label)
+
+images = np.array(images)
+labels = np.array(labels)
+
+label_to_id_dict = {v:i for i,v in enumerate(np.unique(labels))}
+id_to_label_dict = {v: k for k, v in label_to_id_dict.items()}
+label_ids = np.array([label_to_id_dict[x] for x in labels])
+
+########### analysis of data ###########
+
+plt.rcParams["figure.figsize"] = (10,6)
+plt.rcParams['figure.dpi'] = 300
+colors = ["#B6EE56", "#D85F9C", "#EEA756", "#56EEE8"]
+
+class_dist = {}
+def image_counter(folder_path):
+    basename = os.path.basename(folder_path)
+    print('\033[92m'+f"A search has been initiated within the folder named '{basename}'."+'\033[0m')
+    image_extensions = ['.jpg', '.jpeg', '.png']
+
+    for root, dirs, _ in os.walk(folder_path):
+        for dir_name in dirs:
+            dir_path = os.path.join(root, dir_name)
+            count = 0
+
+            for filename in os.listdir(dir_path):
+                file_ext = os.path.splitext(filename)[1].lower()
+
+                if file_ext in image_extensions:
+                    count += 1
+
+            class_dist[dir_name] = count
+            print(f"There are \033[35m{count}\033[0m images in the {dir_name} folder.")
+    print('\033[92m'+"The search has been completed."+'\033[0m')
+
+    keys = list(class_dist.keys())
+    values = list(class_dist.values())
+    explode = (0.1,)*len(keys)
+
+    labels = [f'{key} ({value} images)' for key, value in zip(keys, values)]
+
+    plt.pie(values, explode=explode,labels=labels, autopct='%1.1f%%',
+            shadow=True, startangle=90, colors=colors, textprops={'fontsize': 12, "fontweight" : "bold", "color":"darkblue"},  wedgeprops=
+           {'edgecolor':'darkblue'} , labeldistance=1.15)
+    plt.title("Alzheimer_s Dataset", size=12, fontweight="bold")
+
+
+PATH = 'your path/'
+
+image_counter(PATH)
+###############
+
+num_samples = 5
+
+fig, ax = plt.subplots(1, num_samples, facecolor="gray")
+
+for i in range(num_samples):
+  img = X_train[i]
+  ax[i].imshow(img)
+  ax[i].axis('off')
