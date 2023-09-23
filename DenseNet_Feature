@@ -1,0 +1,41 @@
+DenseNet_model = DenseNet169(input_shape=(45,45,3),include_top=False,weights="imagenet")
+DenseNet_model.trainable = False
+
+global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
+
+prediction_layer = tf.keras.layers.Dense(4,activation='softmax')
+
+model_DenseNet = tf.keras.Sequential([DenseNet_model, global_average_layer,
+  tf.keras.layers.BatchNormalization(),
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dense(64, activation='relu'),
+  tf.keras.layers.Dense(32, activation='relu'),
+  prediction_layer
+])
+
+model_DenseNet.compile(optimizer='adam', loss="categorical_crossentropy", metrics=METRICS)
+model_DenseNet.summary()
+
+history_DenseNet = model_DenseNet.fit(X_train, y_train, batch_size=128 , epochs = 100, validation_data = (X_test, y_test), callbacks = earlystopping, verbose=1)
+
+DenseNet_score = model_DenseNet.evaluate(X_test, y_test)
+print('test loss: ', DenseNet_score[0])
+print('test accuracy: ', DenseNet_score[1])
+
+models.append("DenseNet_model")
+acc.append(DenseNet_score[1])
+
+fig, ax = plt.subplots(1, 2, figsize=(12,6), facecolor="khaki")
+ax[0].set_facecolor('palegoldenrod')
+ax[0].set_title('Loss', fontweight="bold")
+ax[0].set_xlabel("Epoch", size=14)
+ax[0].plot(history_CNN.epoch, history_CNN.history["loss"], label="Train Loss", color="navy")
+ax[0].plot(history_CNN.epoch, history_CNN.history["val_loss"], label="Validation Loss", color="crimson", linestyle="dashed")
+ax[0].legend()
+
+ax[1].set_facecolor('palegoldenrod')
+ax[1].set_title('Loss', fontweight="bold")
+ax[1].set_xlabel("Epoch", size=14)
+ax[1].plot(history_CNN.epoch, history_CNN.history["accuracy"], label="Train accuracy", color="navy")
+ax[1].plot(history_CNN.epoch, history_CNN.history["val_accuracy"], label="Validation accuracy", color="crimson", linestyle="dashed")
+ax[1].legend()
