@@ -1,0 +1,52 @@
+def build_model():
+    model = Sequential()
+
+    model.add(Conv2D(filters=32, kernel_size=(3, 3), strides=(1, 1), activation="relu", kernel_initializer='he_normal', input_shape=(45, 45, 3)))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation="relu", kernel_initializer='he_normal'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+
+    model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), activation="relu", kernel_initializer='he_normal'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+
+    model.add(Flatten())
+
+    model.add(Dense(256, activation="relu", kernel_initializer='he_normal'))
+    model.add(Dense(128, activation="relu"))
+    model.add(Dense(64, activation="relu"))
+    model.add(Dense(4, activation="softmax"))
+
+    model.compile(optimizer='adam', loss="categorical_crossentropy", metrics=METRICS)
+
+    model.summary()
+
+    return model
+
+CNN_model = build_model()
+
+history_CNN = CNN_model.fit(X_train, y_train, batch_size=128 , epochs = 100, validation_data = (X_test, y_test), callbacks = earlystopping, verbose=1)
+
+CNN_score = CNN_model.evaluate(X_test, y_test)
+print('test loss: ', CNN_score[0])
+print('test accuracy: ', CNN_score[1])
+
+models.append("CNN_model")
+acc.append(CNN_score[1])
+
+fig, ax = plt.subplots(1, 2, figsize=(12,6), facecolor="khaki")
+ax[0].set_facecolor('palegoldenrod')
+ax[0].set_title('Loss', fontweight="bold")
+ax[0].set_xlabel("Epoch", size=14)
+ax[0].plot(history_CNN.epoch, history_CNN.history["loss"], label="Train Loss", color="navy")
+ax[0].plot(history_CNN.epoch, history_CNN.history["val_loss"], label="Validation Loss", color="crimson", linestyle="dashed")
+ax[0].legend()
+
+ax[1].set_facecolor('palegoldenrod')
+ax[1].set_title('Loss', fontweight="bold")
+ax[1].set_xlabel("Epoch", size=14)
+ax[1].plot(history_CNN.epoch, history_CNN.history["accuracy"], label="Train accuracy", color="navy")
+ax[1].plot(history_CNN.epoch, history_CNN.history["val_accuracy"], label="Validation accuracy", color="crimson", linestyle="dashed")
+ax[1].legend()
