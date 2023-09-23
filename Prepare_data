@@ -1,0 +1,16 @@
+from sklearn.model_selection import train_test_split
+X_train,  X_test, y_train, y_test = train_test_split(images, label_ids, train_size=0.8)
+
+X_train=X_train/255
+X_test=X_test/255
+
+y_train = tf.keras.utils.to_categorical(y_train, 4)
+y_test = tf.keras.utils.to_categorical(y_test, 4)
+
+##############
+models=[]
+acc=[]
+
+earlystopping = EarlyStopping(monitor = 'val_accuracy', mode = 'max' ,patience = 15,verbose = 1)
+
+METRICS = ['accuracy',tf.keras.metrics.AUC(),tf.keras.metrics.Precision(),tf.keras.metrics.Recall()]
